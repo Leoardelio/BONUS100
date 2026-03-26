@@ -92,14 +92,14 @@ section{padding:16px 0}
   top: 0;
   background: #111;
   z-index: 999;
-  padding: 10px 0;
+  padding: 5px 0;
 }
 #promo-countdown h2 {
   position: sticky;
   top: 0;
   background: #111; /* Make the background consistent with the rest of the page */
   z-index: 999; /* Ensure it's on top of other elements */
-  padding: 10px 0; /* Optional, adjust padding for spacing */
+  padding: 5px 0; /* Optional, adjust padding for spacing */
 }
 
 #promo-banner{padding:0 0 4px}
@@ -189,12 +189,12 @@ footer{border-top:1px solid rgba(255,255,255,.08);padding:30px;text-align:center
   .bonus-grid,.faq-grid{grid-template-columns:1fr;gap:16px}
   .bonus-card,.faq-item{padding:18px}
   .countdown{gap:10px}
-  .count-box{min-width:68px;padding:14px 8px}
-  .count-number{font-size:24px}
+  .count-box{min-width:60px;padding:8px 8px}
+  .count-number{font-size:20px}
   .testimonial-wrap{padding:0 4px}
   .testimonial-track{gap:14px;animation:marquee 24s linear infinite}
   .testimonial-card{width:260px;min-height:auto;padding:18px}
-  .stars{font-size:20px;margin-bottom:10px}
+  .stars{font-size:22px;margin-bottom:10px}
   .testimonial-text{font-size:14px;line-height:1.6;min-height:auto}
   .testimonial-meta{flex-direction:column;align-items:flex-start;gap:4px}
   footer{padding:24px 14px}
@@ -236,7 +236,7 @@ footer{border-top:1px solid rgba(255,255,255,.08);padding:30px;text-align:center
 /* Member Counter Styling */
 #member-counter {
   background-color: #222;
-  padding: 16px 0;
+  padding: 5px 0;
 }
 
 #member-counter h2 {
@@ -269,11 +269,15 @@ footer{border-top:1px solid rgba(255,255,255,.08);padding:30px;text-align:center
 </div>
 </header>
 
-<!-- 11 Jackpot Counter -->
-<section id="jackpot-section" style="padding:10px 0">
+<!-- 2 Countdown Promo -->
+<section id="promo-countdown">
 <div class="container" style="text-align:center">
-<h2 style="margin-bottom:6px">JACKPOT HARI INI</h2>
-<div id="jackpot-value" style="font-size:32px;color:#f3c76b;font-weight:700">Rp 0</div>
+<h2>EVENT BERAKHIR DALAM</h2>
+<div class="countdown">
+<div class="count-box"><span id="h" class="count-number">00</span><span class="count-label">Jam</span></div>
+<div class="count-box"><span id="m" class="count-number">10</span><span class="count-label">Menit</span></div>
+<div class="count-box"><span id="s" class="count-number">00</span><span class="count-label">Detik</span></div>
+</div>
 </div>
 </section>
 
@@ -353,20 +357,16 @@ footer{border-top:1px solid rgba(255,255,255,.08);padding:30px;text-align:center
 </div>
 </section>
 
-<!-- 2 Countdown Promo -->
-<section id="promo-countdown">
+<!-- 11 Jackpot Counter -->
+<section id="jackpot-section" style="padding:5px 0">
 <div class="container" style="text-align:center">
-<h2>PROMO BERAKHIR DALAM</h2>
-<div class="countdown">
-<div class="count-box"><span id="h" class="count-number">23</span><span class="count-label">Jam</span></div>
-<div class="count-box"><span id="m" class="count-number">59</span><span class="count-label">Menit</span></div>
-<div class="count-box"><span id="s" class="count-number">00</span><span class="count-label">Detik</span></div>
-</div>
+<h2 style="margin-bottom:5px">JACKPOT HARI INI</h2>
+<div id="jackpot-value" style="font-size:32px;color:#f3c76b;font-weight:700">Rp 0</div>
 </div>
 </section>
 
 <!-- 13 Clear Section -->
-<section style="height:80px"></section>
+<section style="height:20px"></section>
 
 <!-- 14 Popup Activity -->
 <div id="activity-popup" class="activity-popup"></div>
@@ -381,9 +381,30 @@ footer{border-top:1px solid rgba(255,255,255,.08);padding:30px;text-align:center
 
 <script>
 
-// countdown promo
-const end = new Date().getTime() + 86340000;
-setInterval(()=>{ let now=new Date().getTime(); let diff=end-now;if(diff<0)diff=0; let h=Math.floor(diff/(1000*60*60)); let m=Math.floor((diff%(1000*60*60))/(1000*60)); let s=Math.floor((diff%(1000*60))/1000); document.getElementById('h').innerText=String(h).padStart(2,'0'); document.getElementById('m').innerText=String(m).padStart(2,'0'); document.getElementById('s').innerText=String(s).padStart(2,'0'); },500);
+// countdown promo 10 menit
+let duration = 10 * 60 * 1000; // 10 menit dalam ms
+let end = new Date().getTime() + duration;
+
+setInterval(() => {
+    let now = new Date().getTime();
+    let diff = end - now;
+
+    // Auto-reset jika waktu habis (biar urgensi tetap ada buat user baru)
+    if (diff <= 0) {
+        end = new Date().getTime() + duration;
+        diff = duration;
+    }
+
+    let h = Math.floor(diff / (1000 * 60 * 60));
+    let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    let s = Math.floor((diff % (1000 * 60)) / 1000);
+
+    // Update tampilan (pastikan ID 'h', 'm', 's' ada di HTML Anda)
+    if(document.getElementById('h')) document.getElementById('h').innerText = String(h).padStart(2, '0');
+    if(document.getElementById('m')) document.getElementById('m').innerText = String(m).padStart(2, '0');
+    if(document.getElementById('s')) document.getElementById('s').innerText = String(s).padStart(2, '0');
+}, 500);
+
 
 // popup activity
 const popup=document.getElementById('activity-popup');
